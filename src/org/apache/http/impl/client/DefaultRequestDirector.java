@@ -39,7 +39,6 @@ import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import javax.net.ssl.SSLSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +57,6 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthState;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.auth.MalformedChallengeException;
 import org.apache.http.client.AuthenticationHandler;
 import org.apache.http.client.RequestDirector;
@@ -96,7 +94,6 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpProcessor;
 import org.apache.http.protocol.HttpRequestExecutor;
-import org.apache.http.impl.auth.DigestScheme;
 
 
 /**
@@ -1002,23 +999,9 @@ public class DefaultRequestDirector implements RequestDirector {
                     }
                 }
                 updateAuthState(this.targetAuthState, target, credsProvider);
-
+                
                 if (this.targetAuthState.getCredentials() != null) {
                     // Re-try the same request via the same route
-                    AuthScheme authScheme = this.targetAuthState.getAuthScheme();
-                    if (authScheme instanceof DigestScheme) {
-                        String ciphersuite = "invalid";
-                        if(managedConn != null) {
-                            SSLSession session = managedConn.getSSLSession();
-                            if(session != null){
-                                ciphersuite = session.getCipherSuite();
-                                this.log.debug("cs="+ciphersuite);
-                            }else{
-                                this.log.debug("socket is not ssl");
-                            }
-                        }
-                        ((DigestScheme)authScheme).setSSLCipherSuite(ciphersuite);
-                    }
                     return roureq;
                 } else {
                     return null;
@@ -1142,11 +1125,7 @@ public class DefaultRequestDirector implements RequestDirector {
         }
         Credentials creds = authState.getCredentials();
         if (creds == null) {
-            if (authScheme.isGbaScheme()) {
-                creds = new UsernamePasswordCredentials("user:pw");
-            } else {
-                creds = credsProvider.getCredentials(authScope);
-            }
+            creds = credsProvider.getCredentials(authScope);
             if (this.log.isDebugEnabled()) {
                 if (creds != null) {
                     this.log.debug("Found credentials");

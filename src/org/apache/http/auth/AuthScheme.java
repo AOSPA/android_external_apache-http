@@ -127,20 +127,11 @@ public interface AuthScheme {
      * @return <tt>true</tt> if the authentication process has been completed, 
      * <tt>false</tt> otherwise.
      */
-    boolean isComplete();
-
-    /**
-     * This method returns if a http response packet is gba related
-     *
-     * @return <tt>true</tt> if the packet is gba related,
-     * <tt>false</tt> otherwise.
-     */
-    /**@hide */
-    boolean isGbaScheme();
+    boolean isComplete();    
 
     /**
      * Produces an authorization string for the given set of {@link Credentials}.
-     *
+     * 
      * @param credentials The set of credentials to be used for athentication
      * @param request The request being authenticated
      * @throws AuthenticationException if authorization string cannot 
