@@ -1,0 +1,6 @@
+Code-Review+2: Alex Naidis <alex.naidis@linux.com>
+Submitted-by: Alex Naidis <alex.naidis@linux.com>
+Submitted-at: Tue, 16 Aug 2016 14:10:14 +0200
+Reviewed-on: https://gerrit.aospa.co/183
+Project: AOSPA/android_external_apache-http
+Branch: refs/heads/marshmallow-caf
